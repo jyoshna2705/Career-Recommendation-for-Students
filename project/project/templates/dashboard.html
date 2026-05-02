@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="page-shell centered-page dashboard-page">
+    <div class="dashboard-heading">
+        <h1>Welcome, {{ student_name }}</h1>
+    </div>
+
+    <section class="dashboard-cards">
+        <article class="dashboard-card">
+            <span>Skills</span>
+            <strong>{{ student_profile["skills"] if student_profile and student_profile["skills"] else "Add Your Skills" }}</strong>
+            <p>Create a stronger recommendation profile by keeping your technical skills updated.</p>
+        </article>
+        <article class="dashboard-card">
+            <span>Interested Course</span>
+            <strong>{{ student_profile["interests"] if student_profile else "-" }}</strong>
+            <p>Your course interest helps the system align recommendations with your learning direction.</p>
+        </article>
+        <article class="dashboard-card">
+            <span>Career Recommendation</span>
+            <strong>Dynamic Matching</strong>
+            <p>Recommendations are generated from skills, interested course, and branch interested.</p>
+        </article>
+        <article class="dashboard-card">
+            <span>Learning Path</span>
+            <strong>Roadmap Ready</strong>
+            <p>Every recommendation includes missing skills, roadmap items, and internship ideas.</p>
+        </article>
+    </section>
+
+    <section class="dashboard-stack">
+        <div class="panel profile-panel">
+            <div class="section-heading">
+                <span class="eyebrow">Student Profile</span>
+                <h2>Student Profile Summary</h2>
+            </div>
+            <div class="completion-card">
+                <span>Profile Completion</span>
+                <strong>{{ profile_completion }}%</strong>
+                <div class="progress-track">
+                    <div class="progress-fill" style="width: {{ profile_completion }}%;"></div>
+                </div>
+            </div>
+            <div class="profile-grid">
+                <div>
+                    <span>Name</span>
+                    <strong>{{ student_profile["name"] if student_profile else "-" }}</strong>
+                </div>
+                <div>
+                    <span>Email</span>
+                    <strong>{{ student_profile["email"] if student_profile else "-" }}</strong>
+                </div>
+                <div>
+                    <span>Branch Interested</span>
+                    <strong>{{ student_profile["branch"] if student_profile else "-" }}</strong>
+                </div>
+                <div>
+                    <span>Interested Course</span>
+                    <strong>{{ student_profile["interests"] if student_profile else "-" }}</strong>
+                </div>
+                <div>
+                    <span>Skills</span>
+                    <strong>{{ student_profile["skills"] if student_profile and student_profile["skills"] else "Not added yet" }}</strong>
+                </div>
+            </div>
+            <a href="{{ url_for('edit_profile') }}" class="button button-primary">Edit Profile</a>
+        </div>
+
+        <div class="panel history-panel">
+            <div class="section-heading">
+                <span class="eyebrow">Saved Results</span>
+                <h2>Recommendation History</h2>
+            </div>
+            <div class="history-list">
+                {% if history %}
+                    {% for run in history %}
+                    <details class="history-item">
+                        <summary>Recommendation Run - {{ run["run_date"] }}</summary>
+                        <div class="history-results">
+                            {% for result in run["results"] %}
+                            <div class="history-result-row">
+                                <strong>{{ result["career_name"] }}</strong>
+                                <span>{{ result["confidence_score"] }}</span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </details>
+                    {% endfor %}
+                {% else %}
+                <article class="stack-card">
+                    <p>No recommendations generated yet.</p>
+                </article>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <section class="form-layout dashboard-layout" id="recommendation-form">
+        <div class="form-intro">
+            <span class="eyebrow">Student Dashboard</span>
+            <h1>Hello, {{ student_name }}</h1>
+            <p>
+                Add your current skills, interested course, and branch interest
+                to generate career recommendations with confidence scores.
+            </p>
+            <a href="{{ url_for('home') }}" class="button button-secondary button-dark">
+                Back to Home
+            </a>
+        </div>
+
+        <div class="form-panel">
+            <form method="post" action="{{ url_for('recommend') }}" class="register-form">
+                <label for="skills">Skills</label>
+                <div class="input-group skills-highlight">
+                    <span class="input-icon">&lt;&gt;</span>
+                    <input id="skills" name="skills" type="text" placeholder="Enter your skills (Python, SQL, Java...)" required value="{{ student_profile['skills'] if student_profile else '' }}">
+                </div>
+
+                <label for="interests">Interested Course</label>
+                <div class="input-group textarea-group">
+                    <span class="input-icon">+</span>
+                    <textarea id="interests" name="interests" rows="3" required>{{ student_profile["interests"] if student_profile else "" }}</textarea>
+                </div>
+
+                <label for="preferred_field">Branch Interested</label>
+                <div class="input-group">
+                    <span class="input-icon">#</span>
+                    <input id="preferred_field" name="preferred_field" type="text" required value="{{ student_profile['branch'] if student_profile else '' }}">
+                </div>
+
+                <label for="programming_languages">Programming Languages Known</label>
+                <div class="input-group">
+                    <span class="input-icon">{ }</span>
+                    <input id="programming_languages" name="programming_languages" type="text" required>
+                </div>
+
+                <label for="gpa">GPA or Marks</label>
+                <div class="input-group">
+                    <span class="input-icon">%</span>
+                    <input id="gpa" name="gpa" type="text" required>
+                </div>
+
+                <button type="submit" class="button button-primary">Get Recommendation</button>
+            </form>
+        </div>
+    </section>
+</main>
+{% endblock %}

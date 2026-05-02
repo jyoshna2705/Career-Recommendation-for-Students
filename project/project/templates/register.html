@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="page-shell centered-page auth-page">
+    <section class="form-layout auth-layout">
+        <div class="form-intro">
+            <span class="eyebrow">Student Registration</span>
+            <h1>Join the Career Recommendation Platform</h1>
+            <p>
+                Create a student profile so your academic background, interests,
+                and skills can be stored in the system and used in future recommendations.
+            </p>
+            <a href="{{ url_for('home') }}" class="button button-secondary button-dark">
+                Back to Home
+            </a>
+        </div>
+
+        <div class="form-panel">
+            {% if success %}
+            <div class="success-banner">
+                Registration completed successfully. Student data has been saved to the database.
+            </div>
+            {% endif %}
+            {% if error %}
+            <div class="error-banner">{{ error }}</div>
+            {% endif %}
+
+            <form method="post" class="register-form">
+                <label for="name">Name</label>
+                <div class="input-group">
+                    <span class="input-icon">ID</span>
+                    <input id="name" name="name" type="text" required value="{{ form_data.name if form_data else '' }}">
+                </div>
+
+                <label for="email">Email</label>
+                <div class="input-group">
+                    <span class="input-icon">@</span>
+                    <input id="email" name="email" type="email" required value="{{ form_data.email if form_data else '' }}">
+                </div>
+
+                <label for="password">Password</label>
+                <div class="input-group">
+                    <span class="input-icon">*</span>
+                    <input id="password" name="password" type="password" minlength="6" required value="{{ form_data.password if form_data else '' }}">
+                </div>
+
+                <label for="branch">Branch Interested</label>
+                <div class="input-group">
+                    <span class="input-icon">#</span>
+                    <input id="branch" name="branch" type="text" required value="{{ form_data.branch if form_data else '' }}">
+                </div>
+
+                <label for="interests">Interested Course</label>
+                <div class="input-group textarea-group">
+                    <span class="input-icon">+</span>
+                    <textarea id="interests" name="interests" rows="3" required>{{ form_data.interests if form_data else '' }}</textarea>
+                </div>
+
+                <button type="submit" class="button button-primary">Register Student</button>
+            </form>
+        </div>
+    </section>
+</main>
+{% endblock %}

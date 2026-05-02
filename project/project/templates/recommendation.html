@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="page-shell">
+    <div class="dashboard-heading recommendation-heading">
+        <h1>Career Recommendation Result</h1>
+        <p>{{ student_name }}, here are your matched careers, confidence scores, and next steps.</p>
+    </div>
+
+    <section class="recommendation-stack">
+        <div class="panel">
+            <div class="section-heading">
+                <span class="eyebrow">Student Profile Summary</span>
+                <h2>Student Profile Summary</h2>
+            </div>
+            <div class="profile-grid">
+                <div>
+                    <span>Name</span>
+                    <strong>{{ student_profile["name"] if student_profile else student_name }}</strong>
+                </div>
+                <div>
+                    <span>Email</span>
+                    <strong>{{ student_profile["email"] if student_profile else "-" }}</strong>
+                </div>
+                <div>
+                    <span>Branch Interested</span>
+                    <strong>{{ form_data["preferred_field"] }}</strong>
+                </div>
+                <div>
+                    <span>Interested Course</span>
+                    <strong>{{ form_data["interests"] }}</strong>
+                </div>
+                <div>
+                    <span>Skills</span>
+                    <strong>{{ form_data["skills"] }}</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="section-heading">
+                <span class="eyebrow">Recommended Careers</span>
+                <h2>Recommended Careers</h2>
+            </div>
+            <div class="career-list">
+                {% for recommendation in recommendations %}
+                <article class="recommendation-card career-choice" data-career="{{ recommendation['title']|replace(' ', '-')|lower }}">
+                    <div class="career-topline">
+                        <h3>{{ recommendation["title"] }}</h3>
+                        <span class="score">{{ recommendation["match_score"] }}</span>
+                    </div>
+                    <p>{{ recommendation["description"] }}</p>
+                    <div class="recommendation-meta">
+                        <div>
+                            <span>Confidence Score</span>
+                            <strong>{{ recommendation["confidence_score"] }}</strong>
+                            <div class="progress-track">
+                                <div class="progress-fill" style="width: {{ recommendation['confidence_value'] }}%;"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <span>Required Skills</span>
+                            <strong>{{ recommendation["required_skills"] }}</strong>
+                        </div>
+                        <div>
+                            <span>Student Skills</span>
+                            <strong>{{ recommendation["student_skills"] }}</strong>
+                        </div>
+                        <div>
+                            <span>Skill Gaps</span>
+                            <strong>{{ recommendation["skill_gaps"] }}</strong>
+                        </div>
+                        <div>
+                            <span>Recommended Courses</span>
+                            <strong>{{ recommendation["recommended_courses"] }}</strong>
+                        </div>
+                    </div>
+
+                    <div class="career-expandable">
+                        <div class="nested-section">
+                            <h4>Internship Recommendations</h4>
+                            <div class="internship-grid nested-internships">
+                                {% for internship in recommendation["internships"] %}
+                                <article class="internship-card">
+                                    <h3>{{ internship["title"] }}</h3>
+                                    <p>{{ internship["description"] }}</p>
+                                    <small>{{ internship["required_skills"] }}</small>
+                                </article>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="nested-section">
+                            <h4>Skill Learning Roadmap</h4>
+                            <div class="roadmap-list">
+                                {% for course in recommendation["courses"] %}
+                                <div class="roadmap-item">{{ course }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="section-heading">
+                <span class="eyebrow">Saved Results</span>
+                <h2>Recommendation History</h2>
+            </div>
+            <div class="history-list">
+                {% if history %}
+                    {% for run in history %}
+                    <details class="history-item">
+                        <summary>Recommendation Run - {{ run["run_date"] }}</summary>
+                        <div class="history-results">
+                            {% for result in run["results"] %}
+                            <div class="history-result-row">
+                                <strong>{{ result["career_name"] }}</strong>
+                                <span>{{ result["confidence_score"] }}</span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </details>
+                    {% endfor %}
+                {% else %}
+                <article class="stack-card">
+                    <p>No history available yet.</p>
+                </article>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="section-heading">
+                <span class="eyebrow">Analytics Dashboard</span>
+                <h2>Recommendation Analytics</h2>
+            </div>
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <canvas id="confidenceChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <canvas id="skillMatchChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <canvas id="skillGapChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script id="analytics-data" type="application/json">{{ analytics|tojson }}</script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="{{ url_for('static', filename='js/recommendation.js') }}"></script>
+</main>
+{% endblock %}

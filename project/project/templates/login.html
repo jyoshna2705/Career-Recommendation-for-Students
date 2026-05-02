@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="page-shell centered-page auth-page">
+    <section class="form-layout auth-layout">
+        <div class="form-intro">
+            <span class="eyebrow">Student Login</span>
+            <h1>Access Your Career Dashboard</h1>
+            <p>
+                Sign in with your registered email and password to continue to the
+                career recommendation dashboard.
+            </p>
+            <a href="{{ url_for('home') }}" class="button button-secondary button-dark">
+                Back to Home
+            </a>
+        </div>
+
+        <div class="form-panel">
+            {% if message %}
+            <div class="success-banner">{{ message }}</div>
+            {% endif %}
+            {% if error %}
+            <div class="error-banner">{{ error }}</div>
+            {% endif %}
+
+            <form method="post" class="register-form">
+                <label for="email">Email</label>
+                <div class="input-group">
+                    <span class="input-icon">@</span>
+                    <input id="email" name="email" type="email" required value="{{ form_data.email if form_data else '' }}">
+                </div>
+
+                <label for="password">Password</label>
+                <div class="input-group">
+                    <span class="input-icon">*</span>
+                    <input id="password" name="password" type="password" minlength="6" required value="{{ form_data.password if form_data else '' }}">
+                </div>
+
+                <button type="submit" class="button button-primary">Login</button>
+                <a href="{{ url_for('forgot_password') }}" class="text-link">Forgot Password?</a>
+            </form>
+        </div>
+    </section>
+</main>
+{% endblock %}

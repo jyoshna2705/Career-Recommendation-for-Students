@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="page-shell">
+    <section class="panel">
+        <div class="section-heading">
+            <span class="eyebrow">Admin</span>
+            <h2>Stored Profile Data</h2>
+        </div>
+        <div class="admin-table-wrap">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Skills</th>
+                        <th>Interest</th>
+                        <th>Marks</th>
+                        <th>Career</th>
+                        <th>Confidence</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in profiles %}
+                    <tr>
+                        <td>{{ row["skills"] }}</td>
+                        <td>{{ row["interest"] }}</td>
+                        <td>{{ row["marks"] }}</td>
+                        <td>{{ row["career"] }}</td>
+                        <td>{{ row["confidence"] }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5">No profile data stored yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+{% endblock %}

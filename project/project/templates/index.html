@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="page-shell centered-page home-page">
+    {% if current_student %}
+    <div class="home-action-strip">
+        <h2 class="home-welcome-title">Welcome, {{ current_student }}</h2>
+        <a href="{{ url_for('student_dashboard') }}#recommendation-form" class="button button-primary">New Career Recommendation</a>
+    </div>
+    {% endif %}
+
+    <section class="hero hero-centered">
+        <div class="hero-copy">
+            <span class="eyebrow">Career Guidance Platform</span>
+            <h1>{{ overview["title"] }}</h1>
+            <p class="hero-subtitle">{{ overview["subtitle"] }}</p>
+            <p class="hero-description">{{ overview["description"] }}</p>
+
+            <div class="hero-actions">
+                <a href="#career-matches" class="button button-primary">View Recommendations</a>
+                <a href="{{ url_for('student_dashboard') if current_student else url_for('login') }}" class="button button-secondary">Dashboard</a>
+                <a href="#internships" class="button button-secondary">Explore Internships</a>
+                {% if 'user_id' not in session %}
+                <a href="{{ url_for('register') }}" class="button button-secondary">Register Student</a>
+                <a href="{{ url_for('login') }}" class="button button-secondary">Student Login</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <aside class="profile-card">
+            <p class="card-label">Student Demo</p>
+            <h2>{{ student["full_name"] }}</h2>
+            <div class="profile-grid">
+                <div>
+                    <span>Branch</span>
+                    <strong>{{ student["branch"] }}</strong>
+                </div>
+                <div>
+                    <span>Academic Score</span>
+                    <strong>{{ student["academic_score"] }}</strong>
+                </div>
+                <div>
+                    <span>Interests</span>
+                    <strong>{{ student["interests"] }}</strong>
+                </div>
+                <div>
+                    <span>Strengths</span>
+                    <strong>{{ student["strengths"] }}</strong>
+                </div>
+            </div>
+
+            <div class="confidence">
+                <span>Recommendation Confidence</span>
+                <strong>{{ student["confidence_score"] }}%</strong>
+            </div>
+        </aside>
+    </section>
+
+    <section class="metrics">
+        {% for metric in metrics %}
+        <article class="metric-card">
+            <span>{{ metric["label"] }}</span>
+            <strong>{{ metric["value"] }}</strong>
+            <p>{{ metric["detail"] }}</p>
+        </article>
+        {% endfor %}
+    </section>
+
+    <section class="content-grid" id="career-matches">
+        <div class="section-heading">
+            <span class="eyebrow">Personalized Suggestions</span>
+            <h2>Top Career Matches</h2>
+        </div>
+
+        <div class="career-list">
+            {% for career in careers %}
+            <article class="career-card">
+                <div class="career-topline">
+                    <h3>{{ career["role_name"] }}</h3>
+                    <span class="score">{{ career["match_score"] }}% match</span>
+                </div>
+                <p>{{ career["description"] }}</p>
+                <dl class="career-meta">
+                    <div>
+                        <dt>Demand</dt>
+                        <dd>{{ career["demand_level"] }}</dd>
+                    </div>
+                    <div>
+                        <dt>Core Skills</dt>
+                        <dd>{{ career["skills"] }}</dd>
+                    </div>
+                    <div>
+                        <dt>Growth Path</dt>
+                        <dd>{{ career["growth_path"] }}</dd>
+                    </div>
+                </dl>
+            </article>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="lower-grid">
+        <div class="panel" id="internships">
+            <div class="section-heading">
+                <span class="eyebrow">Action-Oriented Learning</span>
+                <h2>Internship Recommendations</h2>
+            </div>
+            <div class="stack-list">
+                {% for internship in internships %}
+                <article class="stack-card">
+                    <div class="stack-head">
+                        <h3>{{ internship["title"] }}</h3>
+                        <span>{{ internship["level"] }}</span>
+                    </div>
+                    <p>{{ internship["description"] }}</p>
+                    <small>{{ internship["company"] }} • {{ internship["duration"] }}</small>
+                </article>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="section-heading">
+                <span class="eyebrow">Skill Development</span>
+                <h2>Recommended Learning Paths</h2>
+            </div>
+            <div class="stack-list">
+                {% for path in learning_paths %}
+                <article class="stack-card">
+                    <div class="stack-head">
+                        <h3>{{ path["title"] }}</h3>
+                        <span>{{ path["duration"] }}</span>
+                    </div>
+                    <p>{{ path["focus_area"] }}</p>
+                    <small>{{ path["provider"] }}</small>
+                </article>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}

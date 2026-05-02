@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="page-shell centered-page dashboard-page">
+    <div class="dashboard-heading">
+        <h1>Student Profile</h1>
+        <p>View and manage your profile information in one place.</p>
+    </div>
+
+    <section class="dashboard-stack">
+        <div class="panel profile-panel">
+            <div class="section-heading">
+                <span class="eyebrow">Student Profile</span>
+                <h2>Profile Details</h2>
+            </div>
+            <div class="completion-card">
+                <span>Profile Completion</span>
+                <strong>{{ profile_completion }}%</strong>
+                <div class="progress-track">
+                    <div class="progress-fill" style="width: {{ profile_completion }}%;"></div>
+                </div>
+            </div>
+            <div class="profile-grid">
+                <div>
+                    <span>Name</span>
+                    <strong>{{ student_profile["name"] if student_profile else "-" }}</strong>
+                </div>
+                <div>
+                    <span>Email</span>
+                    <strong>{{ student_profile["email"] if student_profile else "-" }}</strong>
+                </div>
+                <div>
+                    <span>Branch Interested</span>
+                    <strong>{{ student_profile["branch"] if student_profile else "-" }}</strong>
+                </div>
+                <div>
+                    <span>Interested Course</span>
+                    <strong>{{ student_profile["interests"] if student_profile else "-" }}</strong>
+                </div>
+                <div>
+                    <span>Skills</span>
+                    <strong>{{ student_profile["skills"] if student_profile and student_profile["skills"] else "Not added yet" }}</strong>
+                </div>
+            </div>
+            <a href="{{ url_for('edit_profile') }}" class="button button-primary">Edit Preferences</a>
+        </div>
+    </section>
+</main>
+{% endblock %}

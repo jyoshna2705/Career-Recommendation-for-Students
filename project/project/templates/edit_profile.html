@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="page-shell centered-page auth-page">
+    <section class="form-layout auth-layout">
+        <div class="form-intro">
+            <span class="eyebrow">Edit Profile</span>
+            <h1>Update Your Student Profile</h1>
+            <p>
+                Keep your branch, interested course, and skills up to date to
+                improve recommendation quality.
+            </p>
+            <a href="{{ url_for('student_profile') }}" class="button button-secondary button-dark">
+                Back to Profile
+            </a>
+        </div>
+
+        <div class="form-panel">
+            {% if error %}
+            <div class="error-banner">{{ error }}</div>
+            {% endif %}
+
+            <form method="post" class="register-form">
+                <label for="name">Name</label>
+                <div class="input-group">
+                    <span class="input-icon">ID</span>
+                    <input id="name" name="name" type="text" required value="{{ form_data.name }}">
+                </div>
+
+                <label for="email">Email</label>
+                <div class="input-group readonly-group">
+                    <span class="input-icon">@</span>
+                    <input id="email" name="email" type="email" required value="{{ form_data.email }}" readonly>
+                </div>
+
+                <label for="password">Password</label>
+                <div class="input-group">
+                    <span class="input-icon">*</span>
+                    <input id="password" name="password" type="password" minlength="6" placeholder="Leave blank to keep current password">
+                </div>
+
+                <label for="branch">Branch Interested</label>
+                <div class="input-group">
+                    <span class="input-icon">#</span>
+                    <input id="branch" name="branch" type="text" required value="{{ form_data.branch }}">
+                </div>
+
+                <label for="interests">Interested Course</label>
+                <div class="input-group textarea-group">
+                    <span class="input-icon">+</span>
+                    <textarea id="interests" name="interests" rows="3" required>{{ form_data.interests }}</textarea>
+                </div>
+
+                <label for="skills">Skills</label>
+                <div class="input-group skills-highlight">
+                    <span class="input-icon">&lt;&gt;</span>
+                    <input id="skills" name="skills" type="text" placeholder="Enter your skills (Python, SQL, Java...)" required value="{{ form_data.skills }}">
+                </div>
+
+                <button type="submit" class="button button-primary">Save Profile</button>
+            </form>
+        </div>
+    </section>
+</main>
+{% endblock %}
