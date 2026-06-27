@@ -14,6 +14,7 @@ Course recommendations for skill improvement
 <br>
 User-friendly interface
 <br>
+
 Technologies Used:
 <br>
 Frontend: HTML, CSS, JavaScript
